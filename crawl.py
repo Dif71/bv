@@ -68,7 +68,7 @@ if args:
         
     t = random.randint(0,len(w)-1)
     
-    subprocess.call(["xrandr", "--fb", str(w[t])+ "x"+str(h[t])])
+    subprocess.call(["xrandr", "-s", str(w[t])+ "x"+str(h[t])])
     # subprocess.call(["xrandr", "--mode", str(w[t])+ "x"+str(h[t])],"--display",":0")
     time.sleep(5)
     
