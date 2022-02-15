@@ -28,8 +28,8 @@ if [ "$go" == "s" ]; then
 				# st=$(less st.txt) 
 				# [ "$st" == "sukses" ] && rm -rf st.txt 
 				rm -rf st.txt 
-				echo "$cou. python3.8 crawl.py -t $dom -r ${refe[$cou]} -p $prx"
-				# python3.8 crawl.py -t "$dom" -r "${refe[$cou]}" -p "$prx"
+				# echo "$cou. python3.8 crawl.py -t $dom -r ${refe[$cou]} -p $prx"
+				python3.8 crawl.py -t "$dom" -r "${refe[$cou]}" -p "$prx"
 				break
 			else
 				echo "nunggu"
