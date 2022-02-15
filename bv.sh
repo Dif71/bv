@@ -9,26 +9,38 @@ IFS=', ' read -r -a dt <<< "$dts"
 IFS=', ' read -r -a refe <<< "$refs"
 IFS=', ' read -r -a prxe <<< "$prxs"
 
-
 arrIN=(${dts//|/ })
 dom=${arrIN[0]}
 px=${arrIN[1]}
 go=${arrIN[2]}
 
-# echo "tespython3.8 crawl.py -t "$dom" -r "${refe[0]}" -p "$px
-# echo "tes $dom $px"
-# exit 0
-
 tref=${#refe[@]}
 tprx=${#prxe[@]}
 
 if [ "$go" == "s" ]; then
-	# echo "python3.8 crawl.py -t $dom -r ${refe[0]} -p $px"
-	# python3.8 crawl.py -t "$dom" -r "${refe[0]}" -p "${prxe[0]}"
-  python3.8 crawl.py -t "$dom" -r google -p "${prxe[0]}"
-  python3.8 crawl.py -t "$dom" -r googleimage -p "${prxe[1]}"
-  python3.8 crawl.py -t "$dom" -r bing -p "${prxe[2]}"
-	# bash ts.sh "$dom" "$px"
+	cou=1
+	for prx in "${prxe[@]}"
+	do
+		idx=$(($cou % $tref))
+		while :; 
+		do 
+			if [ -f st.txt ]; then 
+				# st=$(less st.txt) 
+				# [ "$st" == "sukses" ] && rm -rf st.txt 
+				rm -rf st.txt 
+				echo "$cou. python3.8 crawl.py -t $dom -r ${refe[$cou]} -p $prx"
+				# python3.8 crawl.py -t "$dom" -r "${refe[$cou]}" -p "$prx"
+				break
+			else
+				echo "nunggu"
+			fi
+			dly=$(shuf -i 3-10 -n 1)
+			sleep "$dly"
+		done
+		((cou++))
+	done	
+	echo "[Done]"
+
 elif [ "$go" == "p" ]; then
 	cou=1
 	for prx in "${prxe[@]}"
@@ -46,7 +58,6 @@ elif [ "$go" == "p" ]; then
 
 else
 	echo "Set par 2!"
-	# echo "$go"
 	exit 0
 fi
 
