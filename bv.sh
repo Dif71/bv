@@ -62,5 +62,5 @@ else
 fi
 
 echo ""
-echo -e " == [\e[32mRunning\e[0m] == "
+echo -e " == [\e[32mCompleted\e[0m] == "
 echo ""
