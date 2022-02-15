@@ -28,8 +28,8 @@ if [ "$go" == "s" ]; then
 				# st=$(less st.txt) 
 				# [ "$st" == "sukses" ] && rm -rf st.txt 
 				rm -rf st.txt 
-				# echo "$cou. python3.8 crawl.py -t $dom -r ${refe[$cou]} -p $prx"
-				python3.8 crawl.py -t "$dom" -r "${refe[$cou]}" -p "$prx"
+				# echo "$cou. python3.8 crawl.py -t $dom -r ${refe[$cou-1]} -p $prx"
+				python3.8 crawl.py -t "$dom" -r "${refe[$cou-1]}" -p "$prx"
 				break
 			else
 				echo "nunggu"
@@ -48,7 +48,7 @@ elif [ "$go" == "p" ]; then
 		idx=$(($cou % $tref))
 		# echo "$cou. $prx"
 		echo "$cou. python3.8 crawl.py -t $dom -r ${refe[$idx]} -p $prx"
-		# python3.8 crawl.py -t "$dom" -r "${refe[$cou]}" -p "$prx"
+		# python3.8 crawl.py -t "$dom" -r "${refe[$cou-1]}" -p "$prx"
 		
 		dly=$(shuf -i 3-10 -n 1)
 		# echo "$dly"
