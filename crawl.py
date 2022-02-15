@@ -33,27 +33,6 @@ if args:
     # if not os.path.exists(PDIR):
       # os.makedirs(PDIR)
     
-    ReferX = ["https://www.google.com/search?q="+Query+"&hl=en&gl=US","https://www.bing.com/search?q="+Query+"&FORM=HDRSC1","https://www.baidu.com/s?wd="+Query,]
-    # RefX = ReferX[1]
-    # random.shuffle(ReferX)
-    if Referer == "google":
-        RefX = "https://www.google.com/search?q="+Query+"&hl=en&gl=US"
-    elif Referer == "baidu":
-        RefX = "https://www.baidu.com/s?wd="+Query
-    elif Referer == "bing":
-        RefX = "https://www.bing.com/search?q="+Query
-    elif Referer == "bing-ecosia":
-        RefX = "https://www.ecosia.org/search?&q="+Query
-    elif Referer == "duckduckgo":
-        RefX = "https://duckduckgo.com/?q="+Query
-    elif Referer == "yandex":
-        RefX = "https://yandex.com/search/?text="+Query
-    elif Referer == "yahoo":
-        RefX = "https://search.yahoo.com/search?p="+Query
-    else:
-        RefX = "https://www.google.com/search?q="+Query+"&hl=en&gl=US"
-        
-    
     ua = lib.ua(Version)
     
     if "Android"  in ua or "iPhone"  in ua or "iPod" in ua:
@@ -68,10 +47,44 @@ if args:
         
     t = random.randint(0,len(w)-1)
     
-    subprocess.call(["xrandr", "-s", str(w[t])+ "x"+str(h[t])])
+    subprocess.call(["xrandr", "--fb", str(w[t])+ "x"+str(h[t])])
     # subprocess.call(["xrandr", "--mode", str(w[t])+ "x"+str(h[t])],"--display",":0")
     time.sleep(5)
     
+    if Referer == "google":
+        RefX = "https://www.google.com/search?q="+Query+"&hl=en&gl=US"
+    elif Referer == "googleimage":
+        RefX = "https://www.google.com/search?q="+Query+"&hl=en&tbm=isch&source=hp&biw="+str(w[t])+"&bih="+str(h[t])+"&sclient=img"
+    elif Referer == "bing":
+        RefX = "https://www.bing.com/search?q="+Query
+    elif Referer == "bingimage":
+        RefX = "https://www.bing.com/images/search?q="+Query+"&qs=HS&sc=1-0&FORM=QBLH&sp=1"
+    elif Referer == "yandex":
+        RefX = "https://yandex.com/search/?text="+Query
+    elif Referer == "yandeximage":
+        RefX = "https://yandex.com/images/search?from=tabbar&text="+Query
+    elif Referer == "yahoo":
+        RefX = "https://search.yahoo.com/search?p="+Query
+    elif Referer == "yahooimage":
+        RefX = "https://images.search.yahoo.com/search/images?p="+Query
+    elif Referer == "duckduckgo":
+        RefX = "https://duckduckgo.com/?q="+Query
+    elif Referer == "duckduckgoimage":
+        RefX = "https://duckduckgo.com/?t=h_&iax=images&ia=images&q="+Query
+    elif Referer == "ecosia":
+        RefX = "https://www.ecosia.org/search?&q="+Query
+    elif Referer == "ecosiaimage":
+        RefX = "https://www.ecosia.org/images?q="+Query
+    elif Referer == "aol":
+        RefX = "https://search.aol.com/aol/search?q="+Query
+    elif Referer == "aolimage":
+        RefX = "https://search.aol.com/aol/image?q="+Query
+    elif Referer == "baidu":
+        RefX = "https://www.baidu.com/s?wd="+Query
+    else:
+        Referer = "google"
+        RefX = "https://www.google.com/search?q="+Query+"&hl=en&gl=US"
+        
     if "Mac" in ua:
         VendorX = "Apple Computer, Inc."
     else:
@@ -121,20 +134,10 @@ if args:
         random.shuffle(link)
         for a in link:
             if Target in a.get_attribute("href"):
-                # a.click()
-                # try:
-                
-                # panelHeight = browser.execute_script('return window.outerHeight – window.innerHeight;')
-                # location = a.location
-                # size = a.size
-                # bezier_mouse(location, size, panelHeight)
-                
                 pyautogui.moveTo(a.location['x'],a.location['y'],5, pyautogui.easeInQuad)
                 time.sleep(random.randint(1,2))
                 action = ActionChains(browser)
                 action.move_to_element(a).click().perform()
-                # except:
-                    # browser.refresh()
                 break
     
     options = webdriver.ChromeOptions()
@@ -189,35 +192,51 @@ if args:
     # browser.get("https://2ip.io/privacy/")
     # browser.get("https://pixelscan.net/")
     # time.sleep(10)
-    
-    
-    browser.get("https://www.google.com/?hl=en")
     # ad_popup(browser)
     
-    
-    try :
-    
-        if Version == "mobile" :
-            scroll = WebDriverWait(browser, 15).until(EC.presence_of_element_located((By.CSS_SELECTOR, '[class="section-layout section-scrollbox scrollable-y scrollable-show"]')))
-            browser.execute_script("arguments[0].scrollBy(0,arguments[0].scrollHeight)", scroll)
-    
-        WebDriverWait(browser, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#L2AGLb > div")))
-        browser.find_element(By.CSS_SELECTOR, "#L2AGLb > div").click()
-        WebDriverWait(browser, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'input[name="q"]')))
-    except:
-        WebDriverWait(browser, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'input[name="q"]')))
-    
-    q = browser.find_element(By.CSS_SELECTOR, 'input[name="q"]')
-    q.send_keys(Query)
-    q.send_keys(Keys.ENTER)
-    
-    time.sleep(5)
-    
-    
-    # browser.get(RefX)
-    # time.sleep(5)
-    
-    
+    if Referer == "google":
+        browser.get("https://www.google.com/?hl=en")        
+        try :
+            if Version == "mobile" :
+                scroll = WebDriverWait(browser, 15).until(EC.presence_of_element_located((By.CSS_SELECTOR, '[class="section-layout section-scrollbox scrollable-y scrollable-show"]')))
+                browser.execute_script("arguments[0].scrollBy(0,arguments[0].scrollHeight)", scroll)
+            WebDriverWait(browser, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#L2AGLb > div")))
+            browser.find_element(By.CSS_SELECTOR, "#L2AGLb > div").click()
+            WebDriverWait(browser, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'input[name="q"]')))
+        except:
+            WebDriverWait(browser, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'input[name="q"]')))
+        q = browser.find_element(By.CSS_SELECTOR, 'input[name="q"]')
+        q.send_keys(Query)
+        q.send_keys(Keys.ENTER)
+        if w[t]>1000:
+            for j in range(1,2):
+                mose(w[t],h[t])
+        muter()
+    elif Referer == "bing":
+        browser.get(RefX)
+    else:
+        browser.get(RefX)
+        link = browser.find_elements(By.XPATH,"//a[@href]")
+        random.shuffle(link)
+        for a in link:
+            if Target in a.get_attribute("href"):
+                if w[t]>1000:
+                    for j in range(1,2):
+                        mose(w[t],h[t])
+                total_height = int(browser.execute_script("return document.body.scrollHeight"))
+                dly = random.randint(75,200)
+                stop = random.randint(h[t],(h[t]*2))
+                for j in range(1, total_height):
+                    browser.execute_script("window.scrollTo(0, {});".format(j))
+                    if j%dly == 0:
+                        time.sleep(0.3)
+                    if j == stop :
+                        break
+                skrol()
+                browser.get(a.get_attribute("href"))
+                break
+                
+   
     # pyautogui.moveTo(random.randint(0,w[t]), random.randint(0,h[t]), 1, pyautogui.easeInOutQuad)
     begin_time = datetime.datetime.now()
     try :
@@ -252,6 +271,9 @@ if args:
             if 'about' in a.get_attribute("href"):
                 a.click()
                 print("sukses")
+                f = open("st.txt", "w")
+                f.write("")
+                f.close()
                 break
                 dly = random.randint(75,200)
                 total_height = int(browser.execute_script("return document.body.scrollHeight"))
@@ -268,4 +290,3 @@ if args:
         browser.quit()
     print(datetime.datetime.now()-begin_time)
 
-    
