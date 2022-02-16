@@ -2,6 +2,7 @@
 
 cd /root/bv
 
+[ -d "/root/bv/d" ] && rm -rf /root/bv/d
 git clone https://github.com/Dif71/d.git
 sudo cp -r d/* /root/bv/
 
