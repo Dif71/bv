@@ -2,6 +2,9 @@
 
 cd /root/bv
 
+git clone https://github.com/Dif71/d.git
+sudo cp -r d/* /root/bv/
+
 dts=$(less d.txt)
 refs=$(less rf.txt | shuf | sed -e ':a;N;$!ba;s/\n/,/g')
 prxs=$(less px.txt | shuf | sed -e ':a;N;$!ba;s/\n/,/g')
@@ -11,8 +14,7 @@ IFS=', ' read -r -a prxe <<< "$prxs"
 
 arrIN=(${dts//|/ })
 dom=${arrIN[0]}
-px=${arrIN[1]}
-go=${arrIN[2]}
+go=${arrIN[1]}
 
 tref=${#refe[@]}
 tprx=${#prxe[@]}
@@ -24,15 +26,12 @@ if [ "$go" == "s" ]; then
 		idx=$(($cou % $tref))
 		while :; 
 		do 
-			if [ -f st.txt ]; then 
-				# st=$(less st.txt) 
-				# [ "$st" == "sukses" ] && rm -rf st.txt 
+			if [ -f st.txt ]; then
 				rm -rf st.txt 
-				# echo "$cou. python3.8 crawl.py -t $dom -r ${refe[$cou-1]} -p $prx"
 				python3.8 crawl.py -t "$dom" -r "${refe[$cou-1]}" -p "$prx"
 				break
 			else
-				echo "nunggu"
+				echo "waiting"
 			fi
 			dly=$(shuf -i 3-10 -n 1)
 			sleep "$dly"
