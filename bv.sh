@@ -32,7 +32,7 @@ if [ "$go" == "s" ]; then
 				python3.8 crawl.py -t "$dom" -r "${refe[$cou-1]}" -p "$prx"
 				break
 			else
-				echo "waiting job finish"
+				echo "waiting job finish from $prx"
 			fi
 		done
 		dly=$(shuf -i 3-10 -n 1)
