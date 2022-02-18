@@ -129,12 +129,12 @@ if args:
             pyautogui.moveTo(random.randint(0,w[t]), random.randint(0,h[t]), 1, pyautogui.easeInOutQuad)
 
     
-    def muter():
+    def muter(Target):
         link = browser.find_elements(By.XPATH,"//a[@href]")
         random.shuffle(link)
         for a in link:
             if Target in a.get_attribute("href"):
-                pyautogui.moveTo(a.location['x'],a.location['y'],5, pyautogui.easeInQuad)
+                pyautogui.moveTo(a.location['x'],a.location['y'],random.randint(1,3), pyautogui.easeInQuad)
                 time.sleep(random.randint(1,2))
                 action = ActionChains(browser)
                 action.move_to_element(a).click().perform()
@@ -211,7 +211,7 @@ if args:
         if w[t]>1000:
             for j in range(1,2):
                 mose(w[t],h[t])
-        muter()
+        muter(Target)
     elif Referer == "bing":
         browser.get(RefX)
     else:
@@ -224,7 +224,7 @@ if args:
                     for j in range(1,2):
                         mose(w[t],h[t])
                 total_height = int(browser.execute_script("return document.body.scrollHeight"))
-                dly = random.randint(75,200)
+                dly = random.randint(100,300)
                 stop = random.randint(h[t],(h[t]*2))
                 for j in range(1, total_height):
                     browser.execute_script("window.scrollTo(0, {});".format(j))
@@ -241,11 +241,11 @@ if args:
     begin_time = datetime.datetime.now()
     try :
         ################## PAGE VIEW ##################
-        for i in range(random.randint(3,7)):
+        for i in range(random.randint(5,15)):
             if w[t]>1000:
                 for j in range(1,2):
                     mose(w[t],h[t])
-            muter()
+            muter(Target)
             cek = browser.find_elements(By.CLASS_NAME, 'list-item')
             if cek :
                 stop = random.randint((h[t]*2),(h[t]*10))
@@ -253,7 +253,7 @@ if args:
                 stop = random.randint(h[t],(h[t]*2))
 
             total_height = int(browser.execute_script("return document.body.scrollHeight"))
-            dly = random.randint(75,200)
+            dly = random.randint(100,300)
             for j in range(1, total_height):
                 browser.execute_script("window.scrollTo(0, {});".format(j))
                 if j%dly == 0:
@@ -261,28 +261,49 @@ if args:
                 if j == stop :
                     break
             skrol()
-            time.sleep(random.randint(2,4))
+            #time.sleep(random.randint(2,4))
 
         ################## CLICK ADS ##################
         link = browser.find_elements(By.XPATH,"//a[@href]")
         random.shuffle(link)
+        Tads = 'auass.org'
         for a in link:
             # if 'googleads.g.doubleclick.net' in a.get_attribute("href"):
-            if 'about' in a.get_attribute("href"):
+            if Tads in a.get_attribute("href"):
                 a.click()
                 print("sukses")
                 f = open("st.txt", "w")
                 f.write("")
                 f.close()
                 break
-                dly = random.randint(75,200)
-                total_height = int(browser.execute_script("return document.body.scrollHeight"))
-                for j in range(1, total_height):
-                    browser.execute_script("window.scrollTo(0, {});".format(j))
-                    if j%dly == 0:
-                        time.sleep(0.5)
-                skrol()
-                time.sleep(random.randint(5,15))
+                
+        dly = random.randint(75,200)
+        total_height = int(browser.execute_script("return document.body.scrollHeight"))
+        for j in range(1, total_height):
+            browser.execute_script("window.scrollTo(0, {});".format(j))
+            if j%dly == 0:
+                time.sleep(0.3)
+        skrol()
+        # time.sleep(random.randint(3,7))
+        
+        ############PAGE VIEW IKLAN###########
+        for i in range(random.randint(2,4)):
+            if w[t]>1000:
+                for j in range(1,2):
+                    mose(w[t],h[t])
+            muter(Tads)
+            stop = random.randint(h[t],(h[t]*5))
+            total_height = int(browser.execute_script("return document.body.scrollHeight"))
+            dly = random.randint(100,300)
+            for j in range(1, total_height):
+                browser.execute_script("window.scrollTo(0, {});".format(j))
+                if j%dly == 0:
+                    time.sleep(0.3)
+                if j == stop :
+                    break
+            skrol()
+            # time.sleep(random.randint(2,4))
+                    
         browser.quit()
     except:
         print("error")
