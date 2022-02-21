@@ -1,4 +1,4 @@
-import os,subprocess,datetime,time,random,argparse,http.client,json,zipfile,pyautogui,requests,urllib.parse,lib
+import sys,os,subprocess,datetime,time,random,argparse,http.client,json,zipfile,pyautogui,requests,urllib.parse,lib
 from selenium import webdriver
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
@@ -7,6 +7,19 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium_stealth import stealth
 from random import randint,shuffle
+
+
+if sys.version_info[0]==2:
+    import six
+    from six.moves.urllib import request
+    opener = request.build_opener(request.ProxyHandler({'http': 'http://lum-customer-hl_35ebcc83-zone-isp:jvbw4hwkf6j0@zproxy.lum-superproxy.io:22225','https': 'http://lum-customer-hl_35ebcc83-zone-isp:jvbw4hwkf6j0@zproxy.lum-superproxy.io:22225'}))
+    JsIP = opener.open('http://lumtest.com/myip.json').read()
+if sys.version_info[0]==3:
+    import urllib.request
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({'http': 'http://lum-customer-hl_35ebcc83-zone-isp:jvbw4hwkf6j0@zproxy.lum-superproxy.io:22225','https': 'http://lum-customer-hl_35ebcc83-zone-isp:jvbw4hwkf6j0@zproxy.lum-superproxy.io:22225'}))
+    JsIP = opener.open('http://lumtest.com/myip.json').read()
+JIP = json.loads(JsIP)
+TZ = {'timezoneId': JIP['geo']['tz']}
 
 
 # Initialize parser
@@ -129,12 +142,12 @@ if args:
             pyautogui.moveTo(random.randint(0,w[t]), random.randint(0,h[t]), 1, pyautogui.easeInOutQuad)
 
     
-    def muter(Target):
+    def muter():
         link = browser.find_elements(By.XPATH,"//a[@href]")
         random.shuffle(link)
         for a in link:
             if Target in a.get_attribute("href"):
-                pyautogui.moveTo(a.location['x'],a.location['y'],random.randint(1,3), pyautogui.easeInQuad)
+                pyautogui.moveTo(a.location['x'],a.location['y'],5, pyautogui.easeInQuad)
                 time.sleep(random.randint(1,2))
                 action = ActionChains(browser)
                 action.move_to_element(a).click().perform()
@@ -146,7 +159,7 @@ if args:
     # options.add_argument("--profile-directory=/root/x/p")
     # options.add_argument("--ignore-certificate-errors")
     # options.add_argument("--disable-plugins-discovery")
-    options.add_argument("--incognito")
+    # options.add_argument("--incognito")
     if args.Proxy:
         PROXY = args.Proxy
         ipx = PROXY.split(':')
@@ -160,8 +173,10 @@ if args:
             options.add_extension(pluginfile)
         else:
             options.add_argument('--proxy-server='+PROXY)
-        ipi = requests.get("http://worldtimeapi.org/api/ip/"+ipx[0]).json()
-        tz_params = {'timezoneId': ipi['timezone']}
+        # ipi = requests.get("http://worldtimeapi.org/api/ip/"+ipx[0]).json()
+        # TZ = {'timezoneId': ipi['timezone']}
+
+        # options.add_argument('--proxy-server='+PROXY)
     
     # options.add_argument("user-data-dir="+PDIR)
     options.add_argument("--disable-fre")
@@ -179,7 +194,7 @@ if args:
     browser = webdriver.Chrome(options=options)
     browser.delete_all_cookies()
     if args.Proxy:
-        browser.execute_cdp_cmd('Emulation.setTimezoneOverride', tz_params)
+        browser.execute_cdp_cmd('Emulation.setTimezoneOverride', TZ)
     stealth(browser,languages=["en-US", "en"],vendor=VendorX,platform=PlatformX,webgl_vendor="Intel Inc.",renderer="Intel Iris OpenGL Engine",fix_hairline=True,)
     # browser.get(Target)
     # browser.maximize_window()
@@ -191,7 +206,7 @@ if args:
     # browser.get("https://whoer.net/")
     # browser.get("https://2ip.io/privacy/")
     # browser.get("https://pixelscan.net/")
-    # time.sleep(10)
+    # time.sleep(5)
     # ad_popup(browser)
     
     if Referer == "google":
@@ -211,7 +226,7 @@ if args:
         if w[t]>1000:
             for j in range(1,2):
                 mose(w[t],h[t])
-        muter(Target)
+        muter()
     elif Referer == "bing":
         browser.get(RefX)
     else:
@@ -224,7 +239,7 @@ if args:
                     for j in range(1,2):
                         mose(w[t],h[t])
                 total_height = int(browser.execute_script("return document.body.scrollHeight"))
-                dly = random.randint(100,300)
+                dly = random.randint(75,200)
                 stop = random.randint(h[t],(h[t]*2))
                 for j in range(1, total_height):
                     browser.execute_script("window.scrollTo(0, {});".format(j))
@@ -241,11 +256,11 @@ if args:
     begin_time = datetime.datetime.now()
     try :
         ################## PAGE VIEW ##################
-        for i in range(random.randint(5,15)):
+        for i in range(random.randint(3,7)):
             if w[t]>1000:
                 for j in range(1,2):
                     mose(w[t],h[t])
-            muter(Target)
+            muter()
             cek = browser.find_elements(By.CLASS_NAME, 'list-item')
             if cek :
                 stop = random.randint((h[t]*2),(h[t]*10))
@@ -253,7 +268,7 @@ if args:
                 stop = random.randint(h[t],(h[t]*2))
 
             total_height = int(browser.execute_script("return document.body.scrollHeight"))
-            dly = random.randint(100,300)
+            dly = random.randint(75,200)
             for j in range(1, total_height):
                 browser.execute_script("window.scrollTo(0, {});".format(j))
                 if j%dly == 0:
@@ -261,49 +276,28 @@ if args:
                 if j == stop :
                     break
             skrol()
-            #time.sleep(random.randint(2,4))
+            time.sleep(random.randint(2,4))
 
         ################## CLICK ADS ##################
         link = browser.find_elements(By.XPATH,"//a[@href]")
         random.shuffle(link)
-        Tads = 'auass.org'
         for a in link:
             # if 'googleads.g.doubleclick.net' in a.get_attribute("href"):
-            if Tads in a.get_attribute("href"):
+            if 'about' in a.get_attribute("href"):
                 a.click()
                 print("sukses")
                 f = open("st.txt", "w")
                 f.write("")
                 f.close()
                 break
-                
-        dly = random.randint(75,200)
-        total_height = int(browser.execute_script("return document.body.scrollHeight"))
-        for j in range(1, total_height):
-            browser.execute_script("window.scrollTo(0, {});".format(j))
-            if j%dly == 0:
-                time.sleep(0.3)
-        skrol()
-        # time.sleep(random.randint(3,7))
-        
-        ############PAGE VIEW IKLAN###########
-        for i in range(random.randint(2,4)):
-            if w[t]>1000:
-                for j in range(1,2):
-                    mose(w[t],h[t])
-            muter(Tads)
-            stop = random.randint(h[t],(h[t]*5))
-            total_height = int(browser.execute_script("return document.body.scrollHeight"))
-            dly = random.randint(100,300)
-            for j in range(1, total_height):
-                browser.execute_script("window.scrollTo(0, {});".format(j))
-                if j%dly == 0:
-                    time.sleep(0.3)
-                if j == stop :
-                    break
-            skrol()
-            # time.sleep(random.randint(2,4))
-                    
+                dly = random.randint(75,200)
+                total_height = int(browser.execute_script("return document.body.scrollHeight"))
+                for j in range(1, total_height):
+                    browser.execute_script("window.scrollTo(0, {});".format(j))
+                    if j%dly == 0:
+                        time.sleep(0.5)
+                skrol()
+                time.sleep(random.randint(5,15))
         browser.quit()
     except:
         print("error")
